@@ -1,0 +1,69 @@
+<template>
+  <div style="width:100%;height:100%;">
+    <button @click="changeNumber">Change</button>
+    <v-map :zoom=10 :center="initialLocation" :options="{center: initialLocation, zoom: 10}">
+      <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+      <v-canvas ref="canvas">
+        <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
+      </v-canvas>
+    </v-map>
+  </div>
+</template>
+
+<script>
+  import Mapa from '../src/mapa'
+  import randomCoordinates from 'random-coordinates' 
+
+  export default {
+    components: {
+      'v-map': Mapa.Map,
+      'v-tilelayer': Mapa.Tile,
+      'v-marker': Mapa.Marker,
+      'v-canvas': Mapa.Canvas
+    },
+    mounted() {
+      let vm = this
+      console.log('mounted')
+      //let canvas = vm.$refs.canvas
+      //canvas
+    },
+    methods: {
+      changeNumber() {
+        let vm = this
+        let canvas = vm.$refs.canvas
+        vm.locations = []
+        let num = Math.random() * 10000
+        for (let i=0;i<num; i++) {
+          let [lat,lng] = randomCoordinates().split(',')
+          vm.locations.push({ latlng: window.L.latLng(lat, lng) })
+        }
+        console.log('added locations')
+        canvas.draw()
+        
+      },
+      getIcon() {
+        return L.divIcon({html: '<span style="width:10px;height:10px;background-color:#ff0324;"></span>'})
+      }
+    },
+    data() {
+      let locations = []
+      let i = 5
+      while(--i) {
+        let [lat,lng] = randomCoordinates().split(',')
+        locations.push({ latlng: window.L.latLng(lat, lng) })
+      }
+    
+      return { 
+        locations: locations,
+        initialLocation: window.L.latLng(-34.9205, -57.953646)
+      }
+    },
+  }
+  
+</script>
+
+<style module>
+  html, body {
+    height: 100%
+  }
+</style>
