@@ -7,7 +7,7 @@
         <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
       </v-canvas>
       <v-markercluster v-if="clusterOn">
-        <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng" :icon="icon"></v-marker>
+        <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: icon}" :lat-lng="marker.latlng"></v-marker>
       </v-markercluster>
     </v-map>
   </div>
