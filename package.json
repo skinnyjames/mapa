@@ -10,8 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "babel-runtime": "6.26.0",
+    "leaflet": "1.3.1",
     "leaflet-canvas-layer": "github:skinnyjames/gLayers.Leaflet",
-    "leaflet": "1.3.1"
+    "leaflet.markercluster": "1.3.0"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "6.23.0",
