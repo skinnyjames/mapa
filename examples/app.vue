@@ -3,6 +3,7 @@
     <button @click="changeNumber">Change</button>
     <v-map :zoom=10 :center="initialLocation" :options="{center: initialLocation, zoom: 10}">
       <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+      <v-geojson :geojson="geojson"></v-geojson>
       <v-canvas  v-if="!clusterOn" ref="canvas">
         <v-marker v-for="(marker, index) in locations" :bare="true" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
       </v-canvas>
@@ -31,18 +32,23 @@
       'v-canvas': Mapa.Canvas,
       'v-markercluster': Mapa.MarkerCluster,
       'v-popup': Mapa.Popup,
-      'v-tooltip': Mapa.Tooltip
+      'v-tooltip': Mapa.Tooltip,
+      'v-geojson': Mapa.GeoJSON
     },
     mounted() {
       let vm = this
       console.log('mounted')
+      window.fetch('https://rawgit.com/gregoiredavid/france-geojson/master/regions/pays-de-la-loire/communes-pays-de-la-loire.geojson')
+      .then((response) => { return response.json() })
+      .then((json) => { vm.geojson = json })
     },
     methods: {
       changeNumber() {
         let vm = this
         let canvas = vm.$refs.canvas
         vm.locations = []
-        let num = Math.random() * 10000
+        //let num = Math.random() * 10000
+        let num = 30000
         for (let i=0;i<num; i++) {
           let [lat,lng] = randomCoordinates().split(',')
           vm.locations.push({ latlng: window.L.latLng(lat, lng) })
@@ -65,6 +71,7 @@
       }
     
       return { 
+        geojson: null,
         icon: icon,
         clusterOn: true,
         locations: locations,

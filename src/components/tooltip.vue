@@ -6,6 +6,7 @@
 
 
 <script>
+  import EventBus from './../bus'
   import eventsBinder from '../util/eventsBinder'
 
   const events = [

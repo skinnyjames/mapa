@@ -5,3 +5,4 @@ exports.Tooltip = require('./components/tooltip').default
 exports.Popup = require('./components/popup').default
 exports.Canvas = require('./components/canvas').default
 exports.MarkerCluster = require('./components/markercluster').default
+exports.GeoJSON = require('./components/geojson').default
