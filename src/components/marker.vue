@@ -28,6 +28,11 @@
   ]
 
   const props = {
+    bare: {
+      type: Boolean,
+      custom: true,
+      default: false,
+    },
     draggable: {
       type: Boolean,
       custom: true,
@@ -76,19 +81,25 @@
       function add(mapa) {
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-            vm.add(vm.$parent.mapa)
+            if(!vm.bare) {
+              vm.add(vm.$parent.mapa)
+            }
             EventBus.$emit('mounted', vm.mapa)
           }
         }
       }
     },
-    add(mapa) {
-      let vm = this
-      vm.mapa.addTo(mapa)
-    },
     beforeDestroy() {
       let vm = this
-      vm.$parent.mapa.removeLayer(vm.mapa)
+      if (!vm.bare) {
+        vm.$parent.mapa.removeLayer(vm.mapa)
+      }
+    },
+    methods: {
+      add(mapa) {
+        let vm = this
+        vm.mapa.addTo(mapa)
+      },
     }
   }
 </script>

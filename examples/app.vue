@@ -4,7 +4,7 @@
     <v-map :zoom=10 :center="initialLocation" :options="{center: initialLocation, zoom: 10}">
       <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
       <v-canvas  v-if="!clusterOn" ref="canvas">
-        <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
+        <v-marker v-for="(marker, index) in locations" :bare="true" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
       </v-canvas>
       <v-markercluster v-if="clusterOn">
         <v-marker v-for="(marker, index) in locations" :key="index" :icon="icon" :options="{icon: icon}" :lat-lng="marker.latlng">
@@ -43,13 +43,13 @@
         let vm = this
         let canvas = vm.$refs.canvas
         vm.locations = []
-        let num = Math.random() * 30000
+        let num = Math.random() * 10000
         for (let i=0;i<num; i++) {
           let [lat,lng] = randomCoordinates().split(',')
           vm.locations.push({ latlng: window.L.latLng(lat, lng) })
         }
         console.log('added locations')
-        //canvas.draw()
+        canvas.draw()
         
       },
       getIcon() {
@@ -67,7 +67,7 @@
     
       return { 
         icon: icon,
-        clusterOn: true,
+        clusterOn: false,
         locations: locations,
         initialLocation: window.L.latLng(-34.9205, -57.953646)
       }
@@ -77,8 +77,6 @@
 </script>
 
 <style module>
-  @import "leaflet.markercluster/dist/MarkerCluster.css";
-  @import "leaflet.markercluster/dist/MarkerCluster.Default.css";
   html, body {
     height: 100%
   }

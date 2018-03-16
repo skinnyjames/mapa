@@ -56,6 +56,12 @@
           }
         }
       })
+    },
+    methods: {
+      add(mapa) {
+        let vm = this
+        vm.mapa.addTo(mapa)
+      },
     }
   }
 </script>
