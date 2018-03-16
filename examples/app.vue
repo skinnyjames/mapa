@@ -8,9 +8,9 @@
       </v-canvas>
       <v-markercluster v-if="clusterOn">
         <v-marker v-for="(marker, index) in locations" :key="index" :icon="icon" :options="{icon: icon}" :lat-lng="marker.latlng">
-          <v-popup>
+          <v-tooltip :options="{direction: 'top'}">
             Hello {{index}}
-          </v-popup>
+          </v-tooltip>
         </v-marker>
       </v-markercluster>
     </v-map>
@@ -30,13 +30,12 @@
       'v-marker': Mapa.Marker,
       'v-canvas': Mapa.Canvas,
       'v-markercluster': Mapa.MarkerCluster,
-      'v-popup': Mapa.Popup
+      'v-popup': Mapa.Popup,
+      'v-tooltip': Mapa.Tooltip
     },
     mounted() {
       let vm = this
       console.log('mounted')
-      //let canvas = vm.$refs.canvas
-      //canvas
     },
     methods: {
       changeNumber() {
@@ -49,7 +48,7 @@
           vm.locations.push({ latlng: window.L.latLng(lat, lng) })
         }
         console.log('added locations')
-        canvas.draw()
+        //canvas.draw()
         
       },
       getIcon() {
@@ -67,7 +66,7 @@
     
       return { 
         icon: icon,
-        clusterOn: false,
+        clusterOn: true,
         locations: locations,
         initialLocation: window.L.latLng(-34.9205, -57.953646)
       }
