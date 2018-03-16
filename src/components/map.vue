@@ -7,6 +7,46 @@
 <script>
   import L from 'leaflet'
   import EventBus from './../bus'
+  import eventsBinder from '../util/eventsBinder.js'
+
+  const events = [
+    'click',
+    'dblclick',
+    'mousedown',
+    'mouseup',
+    'mouseover',
+    'mouseout',
+    'mousemove',
+    'contextmenu',
+    'focus',
+    'blur',
+    'preclick',
+    'load',
+    'unload',
+    'viewreset',
+    'movestart',
+    'move',
+    'moveend',
+    'dragstart',
+    'drag',
+    'dragend',
+    'zoom',
+    'zoomstart',
+    'zoomend',
+    'zoomanim',
+    'zoomlevelschange',
+    'resize',
+    'autopanstart',
+    'layeradd',
+    'layerremove',
+    'baselayerchange',
+    'overlayadd',
+    'overlayremove',
+    'locationfound',
+    'locationerror',
+    'popupopen',
+    'popupclose'
+  ];
 
   const props = {
     center: {
@@ -63,9 +103,28 @@
     props: props,
     mounted() {
       let vm = this
-      vm.mapa = L.map(vm.$el, this.options)
+      const options = vm.options
+
+      Object.assign(options, {
+        minZoom:       vm.minZoom,
+        maxZoom:       vm.maxZoom,
+        maxBounds:     vm.maxBounds,
+        worldCopyJump: vm.worldCopyJump,
+        crs:           vm.crs
+      })
+
+      if (vm.center != null) {
+        options.center = vm.center
+      }
+    
+      if (vm.zoom != null) {
+        options.zoom = vm.zoom
+      }
+      
+      vm.mapa = L.map(vm.$el, options)
+      eventsBinder(vm, vm.mapa, events)
       EventBus.$emit('mounted', vm.mapa)
-    }
+    },
   }
 </script>
 

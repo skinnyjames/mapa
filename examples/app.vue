@@ -7,7 +7,11 @@
         <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: getIcon()}" :lat-lng="marker.latlng"></v-marker>
       </v-canvas>
       <v-markercluster v-if="clusterOn">
-        <v-marker v-for="(marker, index) in locations" :key="index" :options="{icon: icon}" :lat-lng="marker.latlng"></v-marker>
+        <v-marker v-for="(marker, index) in locations" :key="index" :icon="icon" :options="{icon: icon}" :lat-lng="marker.latlng">
+          <v-popup>
+            Hello {{index}}
+          </v-popup>
+        </v-marker>
       </v-markercluster>
     </v-map>
   </div>
@@ -25,7 +29,8 @@
       'v-tilelayer': Mapa.Tile,
       'v-marker': Mapa.Marker,
       'v-canvas': Mapa.Canvas,
-      'v-markercluster': Mapa.MarkerCluster
+      'v-markercluster': Mapa.MarkerCluster,
+      'v-popup': Mapa.Popup
     },
     mounted() {
       let vm = this

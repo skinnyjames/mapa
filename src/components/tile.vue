@@ -49,12 +49,10 @@
       vm.mapa = L.tileLayer(vm.url, vm.options)
 
       EventBus.$on('mounted', function(mapa) {
-        console.log('map-ready')
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
             vm.mapa.addTo(vm.$parent.mapa)
             EventBus.$emit('mounted', vm.mapa)
-            EventBus.$off('mounted')
           }
         }
       })

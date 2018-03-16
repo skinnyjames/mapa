@@ -24,7 +24,6 @@ export default {
           vm.add()
           vm.mapa.addTo(vm.$parent.mapa)
           EventBus.$emit('mounted', vm.mapa)
-          EventBus.$off('mounted')
         }
       }
     })
@@ -45,9 +44,17 @@ export default {
       parent.removeLayer(vm.mapa)
     },
     add () {
-      this.mapa.clearLayers() 
-      let markers = this.$children.map(marker => marker.mapa)
-      this.mapa.addLayers(markers)
+      let vm = this
+      vm.mapa.clearLayers() 
+      
+      for (let i = vm.$children.length; i--;) {
+        for (let ii = vm.$children[i].$children.length; ii--;) {
+          vm.$children[i].$children[ii].add(vm.$children[i].mapa)    
+        }
+      }
+
+      let markers = vm.$children.map(marker => marker.mapa)
+      vm.mapa.addLayers(markers)
     },
   }
 }
