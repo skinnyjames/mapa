@@ -11,8 +11,10 @@ import 'leaflet.markercluster'
 
 export default {
   props: [
+    'locations',
     'options',
-    'bulk'
+    'bulk',
+    'bare'
   ],
   mounted () {
     let vm = this
@@ -21,7 +23,7 @@ export default {
     EventBus.$on('mounted', function(mapa) {
       if (vm.$parent._isMounted) { 
         if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-          vm.add()
+          vm.add(vm.locations)
           vm.mapa.addTo(vm.$parent.mapa)
           EventBus.$emit('mounted', vm.mapa)
         }
@@ -33,7 +35,7 @@ export default {
   },
   updated() {
     let vm = this
-    vm.add()
+    //vm.add()
   },
   methods: {
     remove () {
@@ -43,18 +45,22 @@ export default {
       vm.mapa.clearLayers()
       parent.removeLayer(vm.mapa)
     },
-    add () {
+    add (locations) {
       let vm = this
-      vm.mapa.clearLayers() 
-      
-      for (let i = vm.$children.length; i--;) {
-        for (let ii = vm.$children[i].$children.length; ii--;) {
-          vm.$children[i].$children[ii].add(vm.$children[i].mapa)    
-        }
-      }
 
-      let markers = vm.$children.map(marker => marker.mapa)
+      vm.mapa.clearLayers() 
+
+      let bounds = vm.$parent.mapa.getBounds()
+      let markers 
+      
+      markers = locations
       vm.mapa.addLayers(markers)
+
+      // Popups or tooltips
+      for (let m = markers.length; m--;) {
+        vm.$children[0].add(markers[m], {hello: "world" + m})    
+      } 
+
     },
   }
 }

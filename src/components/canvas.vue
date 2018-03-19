@@ -8,8 +8,11 @@
   import L from 'leaflet'
   import 'leaflet-canvas-layer'
   import EventBus from './../bus.js'
-  
+
+  const props = ['drawing', 'mounting', 'moving', 'unmounting', 'locations']
+
   export default {
+    props: props,
     mounted() {
       let vm = this
       this.mapa = this.drawObject()
@@ -73,17 +76,25 @@
         let vm = this
         let map = vm.$parent.mapa
         let ctx = info.canvas.getContext('2d')
+        //let markers = vm.$children.map(marker => marker.mapa)
+        let markers = vm.locations
 
-        ctx.clearRect(0,0, info.canvas.width, info.canvas.height)
-        ctx.fillStyle = "rgba(255, 116, 0, 1)"
+        if (typeof vm.drawing == 'function') {
 
-        let markers = vm.$children.map(marker => marker.mapa)
-        for (let i=0; i<markers.length; i++) {
-          let dot = map.latLngToContainerPoint(markers[i]._latlng)           
-          ctx.beginPath()
-          ctx.arc(dot.x, dot.y, 5, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.closePath()
+          vm.drawing(info, map, ctx, markers)  
+
+        } else {
+
+          ctx.clearRect(0,0, info.canvas.width, info.canvas.height)
+          ctx.fillStyle = "rgba(255, 116, 0, 1)"
+
+          for (let i=0; i<markers.length; i++) {
+            let dot = map.latLngToContainerPoint(markers[i]._latlng)           
+            ctx.beginPath()
+            ctx.arc(dot.x, dot.y, 5, 0, Math.PI * 2)
+            ctx.fill()
+            ctx.closePath()
+          }
         }
         info.layer.fire('zoom')        
         vm.$emit('draw', info)

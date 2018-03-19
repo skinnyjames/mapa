@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot></slot>
+    <slot name="tooltip"></slot>
   </div>
 </template>
 
@@ -19,6 +19,11 @@
   ]
 
   const props = {
+    bare: {
+      type: Boolean,
+      custom: true,
+      default: false,
+    },
     content: {
       default: '',
     },
@@ -39,6 +44,7 @@
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
             if(!vm.bare) {
+              console.log('tooltip not bare')
               vm.add(vm.$parent.mapa)
             }
             EventBus.$emit('mounted', vm.mapa)
@@ -53,7 +59,7 @@
       }
     },
     methods: {
-      add(mapa) {
+      add(mapa, mapaVm) {
         let vm = this
         vm.mapa.setContent(vm.content || vm.$el)
         mapa.bindTooltip(vm.mapa)

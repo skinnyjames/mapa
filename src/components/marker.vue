@@ -82,7 +82,10 @@
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
             if(!vm.bare) {
+              console.log('not bare')
               vm.add(vm.$parent.mapa)
+            } else {
+              console.log('bare - not added')
             }
             EventBus.$emit('mounted', vm.mapa)
           }
