@@ -8,8 +8,10 @@
   import L from 'leaflet'
   import 'leaflet-canvas-layer'
   import EventBus from './../bus.js'
+  const props = ['markers', 'drawing', 'mounting', 'moving', 'unmounting']
   
   export default {
+    props: props,
     mounted() {
       let vm = this
       this.mapa = this.drawObject()
@@ -73,11 +75,11 @@
         let vm = this
         let map = vm.$parent.mapa
         let ctx = info.canvas.getContext('2d')
+        let markers = vm.markers || vm.$children.map(marker => marker.mapa)
 
         ctx.clearRect(0,0, info.canvas.width, info.canvas.height)
         ctx.fillStyle = "rgba(255, 116, 0, 1)"
 
-        let markers = vm.$children.map(marker => marker.mapa)
         for (let i=0; i<markers.length; i++) {
           let dot = map.latLngToContainerPoint(markers[i]._latlng)           
           ctx.beginPath()

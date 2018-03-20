@@ -4,7 +4,7 @@
   import EventBus from './../bus'
 
   export default {
-    props: ['geojson', 'options'],
+    props: ['bare', 'geojson', 'options'],
     mounted() {
       let vm = this
       vm.mapa = L.geoJSON(vm.geojson, vm.options)
@@ -14,7 +14,9 @@
       function add(mapa) {
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-            vm.add(vm.$parent.mapa)
+            if (!vm.bare) {
+              vm.add(vm.$parent.mapa)
+            }
             EventBus.$emit('mounted', vm.mapa)
           }
         }

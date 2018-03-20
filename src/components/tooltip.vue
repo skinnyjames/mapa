@@ -10,6 +10,7 @@
   import eventsBinder from '../util/eventsBinder'
 
   const events = [
+    'bare',
     'add',
     'remove',
     'popupopen',

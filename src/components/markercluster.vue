@@ -11,8 +11,8 @@ import 'leaflet.markercluster'
 
 export default {
   props: [
+    'bare',
     'options',
-    'bulk'
   ],
   mounted () {
     let vm = this
@@ -21,8 +21,10 @@ export default {
     EventBus.$on('mounted', function(mapa) {
       if (vm.$parent._isMounted) { 
         if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-          vm.add()
-          vm.mapa.addTo(vm.$parent.mapa)
+          if (!vm.bare) {  
+            vm.add(vm.$parent.mapa)
+            vm.update()
+          }
           EventBus.$emit('mounted', vm.mapa)
         }
       }
@@ -33,9 +35,15 @@ export default {
   },
   updated() {
     let vm = this
-    vm.add()
+    if (!vm.bare) {
+      vm.update()
+    }
   },
   methods: {
+    add (mapa) {
+      let vm = this
+      vm.mapa.addTo(mapa)
+    },
     remove () {
       let vm = this
       let parent = vm.$parent.mapa
@@ -43,17 +51,20 @@ export default {
       vm.mapa.clearLayers()
       parent.removeLayer(vm.mapa)
     },
-    add () {
+    update (mapas) {
       let vm = this
+      let markers = mapas
+
       vm.mapa.clearLayers() 
       
-      for (let i = vm.$children.length; i--;) {
-        for (let ii = vm.$children[i].$children.length; ii--;) {
-          vm.$children[i].$children[ii].add(vm.$children[i].mapa)    
+      if (!vm.bare) {
+        for (let i = vm.$children.length; i--;) {
+          for (let ii = vm.$children[i].$children.length; ii--;) {
+            vm.$children[i].$children[ii].add(vm.$children[i].mapa)    
+          }
         }
+        markers = vm.$children.map(marker => marker.mapa)
       }
-
-      let markers = vm.$children.map(marker => marker.mapa)
       vm.mapa.addLayers(markers)
     },
   }
