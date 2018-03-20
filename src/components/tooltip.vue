@@ -10,7 +10,6 @@
   import eventsBinder from '../util/eventsBinder'
 
   const events = [
-    'bare',
     'add',
     'remove',
     'popupopen',
@@ -20,6 +19,7 @@
   ]
 
   const props = {
+    bare: Boolean,
     content: {
       default: '',
     },
@@ -49,8 +49,10 @@
     },
     beforeDestroy() {
       let vm = this
-      if (vm.$parent.mapa.getTooltip()) {
-        vm.$parent.mapa.unbindTooltip()
+      if (!vm.bare) {
+        if (vm.$parent.mapa.getTooltip()) {
+          vm.$parent.mapa.unbindTooltip()
+        }
       }
     },
     methods: {

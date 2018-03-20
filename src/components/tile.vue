@@ -8,6 +8,7 @@
 
   const props = {
     url: String,
+    bare: Boolean,
     attribution: {
       type: String,
       custom: true
@@ -51,7 +52,9 @@
       EventBus.$on('mounted', function(mapa) {
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-            vm.mapa.addTo(vm.$parent.mapa)
+            if (!vm.bare) {
+              vm.mapa.addTo(vm.$parent.mapa)
+            }
             EventBus.$emit('mounted', vm.mapa)
           }
         }

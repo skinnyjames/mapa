@@ -18,6 +18,7 @@
   ]
 
   const props = {
+    bare: Boolean,
     content: {
       default: '',
     },
@@ -41,7 +42,9 @@
       function add(mapa) {
         if (vm.$parent._isMounted) { 
           if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-            vm.add(vm.$parent.mapa)
+            if (!vm.bare) {
+              vm.add(vm.$parent.mapa)
+            }
             EventBus.$emit('mounted', vm.mapa)
           }
         }
@@ -57,7 +60,7 @@
       add(mapa) {
         let vm = this
         vm.mapa.setContent(this.content || this.$el)
-        vm.$parent.mapa.bindPopup(vm.mapa)
+        mapa.bindPopup(vm.mapa)
       } 
     }
   }
