@@ -30,7 +30,7 @@ import randomCoordinates from 'random-coordinates'
 
 Vue.component('v-map', Mapa.Map);
 Vue.component('v-tilelayer', Mapa.Tile);
-Vue.component('v-marker', Mapa.MarkerCluster);
+Vue.component('v-markercluster', Mapa.MarkerCluster);
 
 new Vue({
   el: '#app',
