@@ -2,7 +2,7 @@
 
 ### a clone of [Vue2Leaflet](https://github.com/KoRiGaN/Vue2Leaflet), but a little different
 
-This library is heavily inspired by the great work of KoRiGaN, but changes mounting functionality and supports programmatic 
+This library is heavily inspired by (and a fork of) the great work of KoRiGaN, but changes mounting functionality and supports programmatic 
 manipulation of the map object (mapa) via use of the `bare` property
 
 This privleges plugin developers and library users that need good performance without the costly overhead of rendering DOM elements
