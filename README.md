@@ -4,14 +4,16 @@
 
 This library is heavily inspired by the great work of KoRiGaN, but changes mounting functionality and supports programmatic 
 manipulation of the map object (mapa) via use of the `bare` property
+
 This privleges plugin developers and library users that need good performance without the costly overhead of rendering DOM elements
+
 This library is not quite ready for production, but feel free to clone and test it out 
 
 ## usage
 
 ### markup
 
-``` 
+```html
 <v-map ref="map" :zoom=10 :center="initialLocation" :options="{center: initialLocation, zoom: 10}">
   <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
   <v-markercluster ref="cluster" v-if="clusterOn" :bare="true" :options="{chunkedLoading: true, maxClusterRadius: 200}"></v-markercluster>
@@ -20,7 +22,7 @@ This library is not quite ready for production, but feel free to clone and test 
 ```
 ### javascript 
 
-```
+```javascript
 import Mapa from 'mapa'
 
 // random coordinates example
