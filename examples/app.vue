@@ -5,9 +5,7 @@
       <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
       <v-geojson :geojson="geojson"></v-geojson>
       <v-canvas  v-if="!clusterOn" ref="canvas" :drawing="onDraw" :locations="locations"></v-canvas>
-      <v-markercluster v-if="clusterOn" ref="cluster" :locations="locations" :bare="true" :options="{chunkedLoading: true, maxClusterRadius: 200}">
-        <v-tooltip :bare="true">Hello</v-tooltip>
-      </v-markercluster>
+      <v-markercluster v-if="clusterOn" ref="cluster" :markers="locations" :bare="true" :options="{chunkedLoading: true, maxClusterRadius: 200}"></v-markercluster>
     </v-map>
   </div>
 </template>
@@ -44,14 +42,14 @@
         let cluster = vm.$refs.cluster
         vm.locations = []
         //let num = Math.random() * 10000
-        let num = 100000
+        let num = 300000
         for (let i=0;i<num; i++) {
           let [lat,lng] = randomCoordinates().split(',')
           vm.locations.push(window.L.marker([lat, lng], {icon: vm.icon}))
         }
         console.log('added locations')
-        cluster.add(vm.locations)
-        //canvas.draw()
+        //cluster.add(vm.locations)
+        canvas.draw()
         
       },
       getIcon() {
@@ -89,7 +87,7 @@
       return { 
         geojson: null,
         icon: icon,
-        clusterOn: true,
+        clusterOn: false,
         locations: locations,
         initialLocation: window.L.latLng(-34.9205, -57.953646)
       }
