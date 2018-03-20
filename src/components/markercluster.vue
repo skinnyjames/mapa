@@ -8,13 +8,13 @@
 import L from 'leaflet'
 import EventBus from './../bus'
 import 'leaflet.markercluster'
+import Vue from 'vue'
 
 export default {
   props: [
-    'locations',
-    'options',
-    'bulk',
     'bare'
+    'markers',
+    'options',
   ],
   mounted () {
     let vm = this
@@ -23,7 +23,7 @@ export default {
     EventBus.$on('mounted', function(mapa) {
       if (vm.$parent._isMounted) { 
         if (mapa._leaflet_id  == vm.$parent.mapa._leaflet_id) {
-          vm.add(vm.locations)
+          vm.add(vm.markers)
           vm.mapa.addTo(vm.$parent.mapa)
           EventBus.$emit('mounted', vm.mapa)
         }
@@ -45,21 +45,18 @@ export default {
       vm.mapa.clearLayers()
       parent.removeLayer(vm.mapa)
     },
-    add (locations) {
+    add (markers) {
       let vm = this
 
       vm.mapa.clearLayers() 
 
       let bounds = vm.$parent.mapa.getBounds()
-      let markers 
-      
-      markers = locations
       vm.mapa.addLayers(markers)
 
       // Popups or tooltips
-      for (let m = markers.length; m--;) {
+      /*for (let m = markers.length; m--;) {
         vm.$children[0].add(markers[m], {hello: "world" + m})    
-      } 
+      } */
 
     },
   }
