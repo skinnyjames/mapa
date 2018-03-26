@@ -1,11 +1,12 @@
 <template>
   <div style="width:100%;height:100%;">
-    <button @click="changeNumber">Change</button>
+    <div class="loading" v-show="isFetching">
+      <h2>Loading...</h2>
+    </div>
+    <button v-on:click="changeNumber()">Change</button>
     <v-map ref="map" :zoom=10 :center="initialLocation" :options="{center: initialLocation, zoom: 10}">
       <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-      <v-geojson :geojson="geojson"></v-geojson>
-      <v-canvas  v-if="!clusterOn" ref="canvas"></v-canvas>
-      <v-markercluster ref="cluster" v-if="clusterOn" :bare="true" :options="{chunkedLoading: true, maxClusterRadius: 200}"></v-markercluster>
+      <v-markercluster ref="cluster" @updated="stopFetching" :bare="true" :options="{chunkedLoading: true, maxClusterRadius: 200}"></v-markercluster>
     </v-map>
   </div>
 </template>
@@ -21,7 +22,6 @@
       'v-map': Mapa.Map,
       'v-tilelayer': Mapa.Tile,
       'v-marker': Mapa.Marker,
-      'v-canvas': Mapa.Canvas,
       'v-markercluster': Mapa.MarkerCluster,
       'v-popup': Mapa.Popup,
       'v-tooltip': Mapa.Tooltip,
@@ -29,35 +29,36 @@
     },
     mounted() {
       let vm = this
+
       vm.$refs.cluster.add(vm.$refs.map.mapa)
       vm.$refs.cluster.update(vm.locations)
 
-      window.fetch('https://rawgit.com/gregoiredavid/france-geojson/master/regions/pays-de-la-loire/communes-pays-de-la-loire.geojson')
-      .then((response) => { return response.json() })
-      .then((json) => { vm.geojson = json })
+      vm.isFetching = false
     },
     methods: {
+      stopFetching(){ 
+        console.log('cluster updated')
+        this.isFetching = false
+      },
       changeNumber() {
         let vm = this
-        let canvas = vm.$refs.canvas
-        let cluster = vm.$refs.cluster
+        vm.isFetching = true
 
+        let cluster = vm.$refs.cluster
         vm.locations = []
-        //let num = Math.random() * 10000
-        let num = 50000
-        for (let i=0;i<num; i++) {
-          let [lat,lng] = randomCoordinates().split(',')
-          let marker = window.L.marker([lat, lng], {icon: vm.icon})
-          marker.bindTooltip("Hello " + i)  
-          vm.locations.push(marker)
-        }
-        cluster.update(vm.locations)
-        //canvas.draw()
+
+        setTimeout(function(){ 
+          let num = 50000
+          for (let i=0;i<num; i++) {
+            let [lat,lng] = randomCoordinates().split(',')
+            let marker = window.L.marker([lat, lng], {icon: vm.icon})
+            marker.bindTooltip("Hello " + i)  
+            vm.locations.push(marker)
+          }
+          cluster.update(vm.locations)
+        }, 100)
         
       },
-      getIcon() {
-        return L.divIcon({html: '<span style="width:10px;height:10px;background-color:#ff0324;"></span>'})
-      }
     },
     data() {
       let locations = []
@@ -73,7 +74,7 @@
       return { 
         geojson: null,
         icon: icon,
-        clusterOn: true,
+        isFetching: true,
         locations: locations,
         initialLocation: window.L.latLng(-34.9205, -57.953646)
       }
@@ -82,8 +83,22 @@
   
 </script>
 
-<style module>
+<style>
   html, body {
     height: 100%
+  }
+  div.loading {
+    z-index:999999999999999;
+    width:100vw;
+    height:100vh;
+    top:30px;
+    left:0;
+    right:0;
+    bottom:0;
+    position:absolute;
+    background-color:rgba(0,0,0,.9);
+    color:white;
+    display:flex;align-items:center;
+    justify-content:center;
   }
 </style>

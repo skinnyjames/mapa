@@ -9,6 +9,19 @@ This privleges plugin developers and library users that need good performance wi
 
 This library is not quite ready for production, but feel free to clone and test it out 
 
+```
+npm install 
+
+npm run default
+
+or 
+
+npm run canvas
+
+or
+
+npm run cluster
+
 ## usage
 
 ### markup

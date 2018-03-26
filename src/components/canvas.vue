@@ -73,6 +73,7 @@
       },
       onDrawLayer(info) {
         let vm = this
+        vm.$emit('draw', info)
         let map = vm.$parent.mapa
         let ctx = info.canvas.getContext('2d')
         let markers = vm.markers || vm.$children.map(marker => marker.mapa)
@@ -88,7 +89,7 @@
           ctx.closePath()
         }
         info.layer.fire('zoom')        
-        vm.$emit('draw', info)
+        vm.$emit('drawn', info)
       },
     }, 
   }

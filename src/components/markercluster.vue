@@ -51,11 +51,14 @@ export default {
       vm.mapa.clearLayers()
       parent.removeLayer(vm.mapa)
     },
+    clear() {
+      this.mapa.clearLayers()
+    },
     update (mapas) {
       let vm = this
       let markers = mapas
 
-      vm.mapa.clearLayers() 
+      vm.clear()
       
       if (!vm.bare) {
         for (let i = vm.$children.length; i--;) {
@@ -66,6 +69,7 @@ export default {
         markers = vm.$children.map(marker => marker.mapa)
       }
       vm.mapa.addLayers(markers)
+      vm.$emit('updated')
     },
   }
 }
